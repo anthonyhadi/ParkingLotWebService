@@ -1,12 +1,12 @@
 package com.anthony.parkinglot.controller;
 
+import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.service.ParkingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -43,5 +43,11 @@ public class ParkingLotController {
         jsonObject.put("message", respMessage);
 
         return jsonObject;
+    }
+
+    @GetMapping("/status")
+    @ResponseBody
+    public List<Lot> status() {
+        return parkingService.status();
     }
 }
