@@ -19,8 +19,26 @@ public class ParkingLotController {
     }
 
     @GetMapping("/create")
-    public ObjectNode createLots(@RequestParam("noOfLots")  int noOfLots) {
+    public ObjectNode createLots(@RequestParam("noOfLots") int noOfLots) {
         String respMessage = parkingService.createParkingLot(noOfLots);
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        jsonObject.put("message", respMessage);
+
+        return jsonObject;
+    }
+
+    @GetMapping("/park")
+    public ObjectNode park(@RequestParam("plateNo") String plateNo, @RequestParam("colour") String colour) {
+        String respMessage = parkingService.parkCar(plateNo, colour);
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        jsonObject.put("message", respMessage);
+
+        return jsonObject;
+    }
+
+    @GetMapping("/remove")
+    public ObjectNode remove(@RequestParam("plateNo") String plateNo, @RequestParam("hours") int colour) {
+        String respMessage = parkingService.removeCar(plateNo, colour);
         ObjectNode jsonObject = objectMapper.createObjectNode();
         jsonObject.put("message", respMessage);
 

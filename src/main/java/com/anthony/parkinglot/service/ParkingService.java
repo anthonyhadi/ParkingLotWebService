@@ -8,4 +8,8 @@ public interface ParkingService {
      * @return a message indicating the result of the operation
      */
     String createParkingLot(int noOfLots);
+
+    String parkCar(String regNo, String colour);
+
+    String removeCar(String regNo, int hours);
 }
