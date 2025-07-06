@@ -47,7 +47,7 @@ public class ParkingServiceImpl implements ParkingService {
         if (lot == null)
             return String.format(Message.PARKING_LOT_NOT_CREATED_OR_PLATE_NOT_EXISTS, regNo);
 
-        lot.setRegNo(null);
+        lot.setPlateNo(null);
         lot.setColour(null);
 
         int totalPay = ParkingLotUtil.calculatePrice(hours);

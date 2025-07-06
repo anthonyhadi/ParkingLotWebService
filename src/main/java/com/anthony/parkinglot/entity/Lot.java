@@ -16,6 +16,6 @@ public class Lot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String regNo;
+    private String plateNo;
     private String colour;
 }

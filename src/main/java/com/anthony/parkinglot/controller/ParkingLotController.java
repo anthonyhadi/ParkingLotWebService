@@ -4,6 +4,7 @@ import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.service.ParkingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public class ParkingLotController {
         this.parkingService = parkingService;
     }
 
+    @Operation(
+            summary = "Create a parking lot",
+            description = "Detemine how many lots a parking lot has"
+    )
     @GetMapping("/create")
     public ObjectNode createLots(@RequestParam("noOfLots") int noOfLots) {
         String respMessage = parkingService.createParkingLot(noOfLots);
@@ -27,6 +32,10 @@ public class ParkingLotController {
         return jsonObject;
     }
 
+    @Operation(
+            summary = "Park a car",
+            description = "A car comes to park in the parking lot. The car plate number and colour will be noted"
+    )
     @GetMapping("/park")
     public ObjectNode park(@RequestParam("plateNo") String plateNo, @RequestParam("colour") String colour) {
         String respMessage = parkingService.parkCar(plateNo, colour);
@@ -36,6 +45,10 @@ public class ParkingLotController {
         return jsonObject;
     }
 
+    @Operation(
+            summary = "Remove a car",
+            description = "A car which already parked in the lot now goes out, leaves the occupied lot now empty"
+    )
     @GetMapping("/remove")
     public ObjectNode remove(@RequestParam("plateNo") String plateNo, @RequestParam("hours") int colour) {
         String respMessage = parkingService.removeCar(plateNo, colour);
@@ -45,6 +58,10 @@ public class ParkingLotController {
         return jsonObject;
     }
 
+    @Operation(
+            summary = "Parking lot slots statuses",
+            description = "Printing slots statuses of the parking lot"
+    )
     @GetMapping("/status")
     @ResponseBody
     public List<Lot> status() {

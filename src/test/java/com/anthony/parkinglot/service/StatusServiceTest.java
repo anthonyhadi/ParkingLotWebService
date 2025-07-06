@@ -45,9 +45,9 @@ class StatusServiceTest {
 
         // Assert
         assertEquals(2, result.size());
-        assertEquals("ABC123", result.get(0).getRegNo());
+        assertEquals("ABC123", result.get(0).getPlateNo());
         assertEquals("Red", result.get(0).getColour());
-        assertEquals("XYZ789", result.get(1).getRegNo());
+        assertEquals("XYZ789", result.get(1).getPlateNo());
         assertEquals("Blue", result.get(1).getColour());
         verify(lotRepository).findAll();
     }

@@ -63,7 +63,7 @@ class ParkingLotControllerTest {
         when(parkingService.status()).thenReturn(lots);
         List<Lot> result = parkingLotController.status();
         assertEquals(2, result.size());
-        assertEquals("ABC123", result.get(0).getRegNo());
+        assertEquals("ABC123", result.get(0).getPlateNo());
         assertEquals("Blue", result.get(1).getColour());
         verify(parkingService).status();
     }

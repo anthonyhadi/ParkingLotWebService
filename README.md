@@ -7,6 +7,13 @@ This is a simple HTTP Restful Web service built using spring boot. The content o
 ## Java Version
 `21`
 
+## Technologies
+
+- Spring Boot Web Restful
+- H2 In Memory Database
+- Spring Data JPA
+- Project Lombok mainly for auto-generating getter & setter
+
 ## How to build
 
 ```
@@ -19,3 +26,6 @@ gradlew.bat build  # Windows
 ```
 ./gradlew bootRun
 ```
+
+## Api Docs
+http://localhost:8080/swagger-ui/index.html
