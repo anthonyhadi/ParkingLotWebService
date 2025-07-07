@@ -3,6 +3,7 @@ package com.anthony.parkinglot.service;
 import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.repository.LotRepository;
 import com.anthony.parkinglot.service.impl.ParkingServiceImpl;
+import com.anthony.parkinglot.util.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,16 +45,17 @@ class RemoveCarServiceTest {
     }
 
     @Test
-    void removeCar_WhenCarNotFound_ShouldReturnNotFoundMessage() {
+    void removeCar_WhenCarNotFound_ShouldThrowException() {
         // Arrange
         when(lotRepository.findFirstByRegNo("XYZ789")).thenReturn(null);
 
-        // Act
-        String result = parkingService.removeCar("XYZ789", 2);
-
-        // Assert
-        assertEquals("Either parking lot isn't created or plate with no XYZ789 isn't found", result);
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            parkingService.removeCar("XYZ789", 2);
+        });
+        assertEquals(String.format(Message.PARKING_LOT_NOT_CREATED_OR_PLATE_NOT_EXISTS, "XYZ789"), exception.getMessage());
         verify(lotRepository).findFirstByRegNo("XYZ789");
+        verify(lotRepository, never()).save(any(Lot.class));
     }
 
     @Test
@@ -66,5 +68,19 @@ class RemoveCarServiceTest {
             parkingService.removeCar("ERR123", 5);
         });
         verify(lotRepository).findFirstByRegNo("ERR123");
+    }
+
+    @Test
+    void removeCar_WithDifferentHours_ShouldCalculateCorrectCharge() {
+        // Arrange
+        Lot lot = new Lot(2L, "TEST123", "Blue");
+        when(lotRepository.findFirstByRegNo("TEST123")).thenReturn(lot);
+
+        // Act
+        String result = parkingService.removeCar("TEST123", 1);
+
+        // Assert
+        assertEquals("Registration number TEST123 with Slot Number 2 is free with Charge 0", result);
+        verify(lotRepository).findFirstByRegNo("TEST123");
     }
 }

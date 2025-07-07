@@ -72,28 +72,30 @@ class CreateParkingServiceTest {
     }
 
     @Test
-    void createParkingLot_WithZero_ShouldReturnErrorMessage() {
+    void createParkingLot_WithZero_ShouldThrowIllegalArgumentException() {
         // Arrange
         int noOfLots = 0;
 
-        // Act
-        String result = parkingService.createParkingLot(noOfLots);
-
-        // Assert
-        assertEquals("Please insert a number at least 1", result);
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            parkingService.createParkingLot(noOfLots);
+        });
+        
+        assertEquals("Please insert a number at least 1", exception.getMessage());
         verify(lotRepository, never()).save(any(Lot.class));
     }
 
     @Test
-    void createParkingLot_WithNegativeNumber_ShouldReturnErrorMessage() {
+    void createParkingLot_WithNegativeNumber_ShouldThrowIllegalArgumentException() {
         // Arrange
         int noOfLots = -5;
 
-        // Act
-        String result = parkingService.createParkingLot(noOfLots);
-
-        // Assert
-        assertEquals("Please insert a number at least 1", result);
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            parkingService.createParkingLot(noOfLots);
+        });
+        
+        assertEquals("Please insert a number at least 1", exception.getMessage());
         verify(lotRepository, never()).save(any(Lot.class));
     }
 

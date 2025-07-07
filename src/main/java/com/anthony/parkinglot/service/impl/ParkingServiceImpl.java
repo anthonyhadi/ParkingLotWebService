@@ -21,7 +21,7 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public String createParkingLot(int noOfLots) {
         if (noOfLots < 1)
-            return Message.INSERT_AT_LEAST_1;
+            throw new IllegalArgumentException(Message.INSERT_AT_LEAST_1);
 
         for (int i = 0; i < noOfLots; i++) {
             lotRepository.save(new Lot());
@@ -33,7 +33,8 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public String parkCar(String regNo, String colour) {
         Lot lot = lotRepository.findFirstByRegNoIsNullAndColourIsNull();
-        if (lot == null) return Message.PARKING_LOT_NOT_CREATED_OR_FULL;
+        if (lot == null)
+            throw new RuntimeException(Message.PARKING_LOT_NOT_CREATED_OR_FULL);
 
         Long emptySlotId = lot.getId();
         lotRepository.save(new Lot(emptySlotId, regNo, colour));
@@ -45,7 +46,7 @@ public class ParkingServiceImpl implements ParkingService {
     public String removeCar(String regNo, int hours) {
         Lot lot = lotRepository.findFirstByRegNo(regNo);
         if (lot == null)
-            return String.format(Message.PARKING_LOT_NOT_CREATED_OR_PLATE_NOT_EXISTS, regNo);
+            throw new RuntimeException(String.format(Message.PARKING_LOT_NOT_CREATED_OR_PLATE_NOT_EXISTS, regNo));
 
         lot.setPlateNo(null).setColour(null);
 

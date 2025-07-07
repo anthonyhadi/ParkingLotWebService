@@ -2,6 +2,7 @@ package com.anthony.parkinglot.controller;
 
 import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.service.ParkingService;
+import com.anthony.parkinglot.util.Message;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,16 @@ class ParkingLotControllerTest {
     }
 
     @Test
+    void createLots_WhenInvalidInput_ShouldThrowException() {
+        when(parkingService.createParkingLot(0)).thenThrow(new IllegalArgumentException(Message.INSERT_AT_LEAST_1));
+        
+        assertThrows(IllegalArgumentException.class, () -> {
+            parkingLotController.createLots(0);
+        });
+        verify(parkingService).createParkingLot(0);
+    }
+
+    @Test
     void park_ShouldReturnMessage() {
         when(parkingService.parkCar("ABC123", "Red")).thenReturn("Allocated slot number: 1");
         ObjectNode response = parkingLotController.park("ABC123", "Red");
@@ -48,11 +59,31 @@ class ParkingLotControllerTest {
     }
 
     @Test
+    void park_WhenNoSlotAvailable_ShouldThrowException() {
+        when(parkingService.parkCar("XYZ789", "Blue")).thenThrow(new RuntimeException(Message.PARKING_LOT_NOT_CREATED_OR_FULL));
+        
+        assertThrows(RuntimeException.class, () -> {
+            parkingLotController.park("XYZ789", "Blue");
+        });
+        verify(parkingService).parkCar("XYZ789", "Blue");
+    }
+
+    @Test
     void remove_ShouldReturnMessage() {
         when(parkingService.removeCar("ABC123", 3)).thenReturn("Registration number ABC123 with Slot Number 1 is free with Charge 20");
         ObjectNode response = parkingLotController.remove("ABC123", 3);
         assertEquals("Registration number ABC123 with Slot Number 1 is free with Charge 20", response.get("message").asText());
         verify(parkingService).removeCar("ABC123", 3);
+    }
+
+    @Test
+    void remove_WhenCarNotFound_ShouldThrowException() {
+        when(parkingService.removeCar("XYZ789", 2)).thenThrow(new RuntimeException(String.format(Message.PARKING_LOT_NOT_CREATED_OR_PLATE_NOT_EXISTS, "XYZ789")));
+        
+        assertThrows(RuntimeException.class, () -> {
+            parkingLotController.remove("XYZ789", 2);
+        });
+        verify(parkingService).removeCar("XYZ789", 2);
     }
 
     @Test

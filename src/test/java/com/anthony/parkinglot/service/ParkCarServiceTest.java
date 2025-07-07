@@ -3,6 +3,7 @@ package com.anthony.parkinglot.service;
 import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.repository.LotRepository;
 import com.anthony.parkinglot.service.impl.ParkingServiceImpl;
+import com.anthony.parkinglot.util.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,15 +46,15 @@ class ParkCarServiceTest {
     }
 
     @Test
-    void parkCar_WhenNoSlotAvailable_ShouldReturnFullMessage() {
+    void parkCar_WhenNoSlotAvailable_ShouldThrowException() {
         // Arrange
         when(lotRepository.findFirstByRegNoIsNullAndColourIsNull()).thenReturn(null);
 
-        // Act
-        String result = parkingService.parkCar("XYZ789", "Blue");
-
-        // Assert
-        assertEquals("Either parking lot isn't created or full", result);
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            parkingService.parkCar("XYZ789", "Blue");
+        });
+        assertEquals(Message.PARKING_LOT_NOT_CREATED_OR_FULL, exception.getMessage());
         verify(lotRepository).findFirstByRegNoIsNullAndColourIsNull();
         verify(lotRepository, never()).save(any(Lot.class));
     }

@@ -50,8 +50,8 @@ public class ParkingLotController {
             description = "A car which already parked in the lot now goes out, leaves the occupied lot now empty"
     )
     @GetMapping("/remove")
-    public ObjectNode remove(@RequestParam("plateNo") String plateNo, @RequestParam("hours") int colour) {
-        String respMessage = parkingService.removeCar(plateNo, colour);
+    public ObjectNode remove(@RequestParam("plateNo") String plateNo, @RequestParam("hours") int hours) {
+        String respMessage = parkingService.removeCar(plateNo, hours);
         ObjectNode jsonObject = objectMapper.createObjectNode();
         jsonObject.put("message", respMessage);
 
