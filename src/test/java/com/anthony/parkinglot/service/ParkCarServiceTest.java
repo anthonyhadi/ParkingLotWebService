@@ -33,7 +33,7 @@ class ParkCarServiceTest {
     void parkCar_WhenSlotAvailable_ShouldAllocateSlot() {
         // Arrange
         Lot emptyLot = new Lot(1L, null, null);
-        when(lotRepository.findFirstByRegNoIsNullAndColourIsNull()).thenReturn(emptyLot);
+        when(lotRepository.findFirstByPlateNoIsNullAndColourIsNull()).thenReturn(emptyLot);
         when(lotRepository.save(any(Lot.class))).thenReturn(new Lot(1L, "ABC123", "Red"));
 
         // Act
@@ -41,21 +41,21 @@ class ParkCarServiceTest {
 
         // Assert
         assertEquals("Allocated slot number: 1", result);
-        verify(lotRepository).findFirstByRegNoIsNullAndColourIsNull();
+        verify(lotRepository).findFirstByPlateNoIsNullAndColourIsNull();
         verify(lotRepository).save(new Lot(1L, "ABC123", "Red"));
     }
 
     @Test
     void parkCar_WhenNoSlotAvailable_ShouldThrowException() {
         // Arrange
-        when(lotRepository.findFirstByRegNoIsNullAndColourIsNull()).thenReturn(null);
+        when(lotRepository.findFirstByPlateNoIsNullAndColourIsNull()).thenReturn(null);
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             parkingService.parkCar("XYZ789", "Blue");
         });
         assertEquals(Message.PARKING_LOT_NOT_CREATED_OR_FULL, exception.getMessage());
-        verify(lotRepository).findFirstByRegNoIsNullAndColourIsNull();
+        verify(lotRepository).findFirstByPlateNoIsNullAndColourIsNull();
         verify(lotRepository, never()).save(any(Lot.class));
     }
 
@@ -63,14 +63,14 @@ class ParkCarServiceTest {
     void parkCar_WhenRepositoryThrowsException_ShouldPropagateException() {
         // Arrange
         Lot emptyLot = new Lot(2L, null, null);
-        when(lotRepository.findFirstByRegNoIsNullAndColourIsNull()).thenReturn(emptyLot);
+        when(lotRepository.findFirstByPlateNoIsNullAndColourIsNull()).thenReturn(emptyLot);
         when(lotRepository.save(any(Lot.class))).thenThrow(new RuntimeException("DB error"));
 
         // Act & Assert
         assertThrows(RuntimeException.class, () -> {
             parkingService.parkCar("LMN456", "Green");
         });
-        verify(lotRepository).findFirstByRegNoIsNullAndColourIsNull();
+        verify(lotRepository).findFirstByPlateNoIsNullAndColourIsNull();
         verify(lotRepository).save(new Lot(2L, "LMN456", "Green"));
     }
 }

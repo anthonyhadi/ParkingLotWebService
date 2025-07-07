@@ -6,6 +6,7 @@ import com.anthony.parkinglot.service.ParkingService;
 import com.anthony.parkinglot.util.Message;
 import com.anthony.parkinglot.util.ParkingLotUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public String parkCar(String regNo, String colour) {
-        Lot lot = lotRepository.findFirstByRegNoIsNullAndColourIsNull();
+        Lot lot = lotRepository.findFirstByPlateNoIsNullAndColourIsNull();
         if (lot == null)
             throw new RuntimeException(Message.PARKING_LOT_NOT_CREATED_OR_FULL);
 
@@ -43,8 +44,9 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
+    @Transactional
     public String removeCar(String regNo, int hours) {
-        Lot lot = lotRepository.findFirstByRegNo(regNo);
+        Lot lot = lotRepository.findFirstByPlateNo(regNo);
         if (lot == null)
             throw new RuntimeException(String.format(Message.PARKING_LOT_NOT_CREATED_OR_PLATE_NOT_EXISTS, regNo));
 

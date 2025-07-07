@@ -33,54 +33,54 @@ class RemoveCarServiceTest {
     void removeCar_WhenCarExists_ShouldRemoveAndReturnMessage() {
         // Arrange
         Lot lot = new Lot(1L, "ABC123", "Red");
-        when(lotRepository.findFirstByRegNo("ABC123")).thenReturn(lot);
+        when(lotRepository.findFirstByPlateNo("ABC123")).thenReturn(lot);
 
         // Act
         String result = parkingService.removeCar("ABC123", 3);
 
         // Assert
         assertEquals("Registration number ABC123 with Slot Number 1 is free with Charge 20", result);
-        verify(lotRepository).findFirstByRegNo("ABC123");
+        verify(lotRepository).findFirstByPlateNo("ABC123");
         // No save call since the method only sets fields to null, doesn't persist
     }
 
     @Test
     void removeCar_WhenCarNotFound_ShouldThrowException() {
         // Arrange
-        when(lotRepository.findFirstByRegNo("XYZ789")).thenReturn(null);
+        when(lotRepository.findFirstByPlateNo("XYZ789")).thenReturn(null);
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             parkingService.removeCar("XYZ789", 2);
         });
         assertEquals(String.format(Message.PARKING_LOT_NOT_CREATED_OR_PLATE_NOT_EXISTS, "XYZ789"), exception.getMessage());
-        verify(lotRepository).findFirstByRegNo("XYZ789");
+        verify(lotRepository).findFirstByPlateNo("XYZ789");
         verify(lotRepository, never()).save(any(Lot.class));
     }
 
     @Test
     void removeCar_WhenRepositoryThrowsException_ShouldPropagateException() {
         // Arrange
-        when(lotRepository.findFirstByRegNo("ERR123")).thenThrow(new RuntimeException("DB error"));
+        when(lotRepository.findFirstByPlateNo("ERR123")).thenThrow(new RuntimeException("DB error"));
 
         // Act & Assert
         assertThrows(RuntimeException.class, () -> {
             parkingService.removeCar("ERR123", 5);
         });
-        verify(lotRepository).findFirstByRegNo("ERR123");
+        verify(lotRepository).findFirstByPlateNo("ERR123");
     }
 
     @Test
     void removeCar_WithDifferentHours_ShouldCalculateCorrectCharge() {
         // Arrange
         Lot lot = new Lot(2L, "TEST123", "Blue");
-        when(lotRepository.findFirstByRegNo("TEST123")).thenReturn(lot);
+        when(lotRepository.findFirstByPlateNo("TEST123")).thenReturn(lot);
 
         // Act
         String result = parkingService.removeCar("TEST123", 1);
 
         // Assert
         assertEquals("Registration number TEST123 with Slot Number 2 is free with Charge 0", result);
-        verify(lotRepository).findFirstByRegNo("TEST123");
+        verify(lotRepository).findFirstByPlateNo("TEST123");
     }
 }
