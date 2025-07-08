@@ -10,21 +10,24 @@ This is a simple HTTP Restful Web service built using spring boot. The content o
 ## Technologies
 
 - Spring Boot Web Restful
-- H2 In Memory Database
+- PostgreSQL Database
 - Spring Data JPA
 - Project Lombok mainly for auto-generating getter & setter
 
-## How to build
-
+## How to build locally
 ```
 ./gradlew build  # macOS/Linux
 gradlew.bat build  # Windows
 ```
 
 ## How to run locally
-
 ```
 ./gradlew bootRun
+```
+
+## How to run via Docker
+```
+cd docker && docker compose up -d
 ```
 
 ## Api Docs
