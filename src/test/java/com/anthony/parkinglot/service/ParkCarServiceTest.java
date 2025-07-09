@@ -3,7 +3,7 @@ package com.anthony.parkinglot.service;
 import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.repository.LotRepository;
 import com.anthony.parkinglot.service.impl.ParkingServiceImpl;
-import com.anthony.parkinglot.util.Message;
+import com.anthony.parkinglot.common.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

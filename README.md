@@ -14,20 +14,16 @@ This is a simple HTTP Restful Web service built using spring boot. The content o
 - Spring Data JPA
 - Project Lombok mainly for auto-generating getter & setter
 
-## How to build locally
+## How to run test locally
 ```
-./gradlew build  # macOS/Linux
-gradlew.bat build  # Windows
-```
-
-## How to run locally
-```
-./gradlew bootRun
+$ ./gradlew test  # macOS/Linux
+$ gradlew.bat test  # Windows
 ```
 
 ## How to run via Docker
 ```
-cd docker && docker compose up -d
+$ cd docker
+$ docker compose up -d
 ```
 
 ## Api Docs

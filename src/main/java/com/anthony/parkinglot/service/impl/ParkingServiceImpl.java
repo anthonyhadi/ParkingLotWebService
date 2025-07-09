@@ -3,8 +3,8 @@ package com.anthony.parkinglot.service.impl;
 import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.repository.LotRepository;
 import com.anthony.parkinglot.service.ParkingService;
-import com.anthony.parkinglot.util.Message;
-import com.anthony.parkinglot.util.ParkingLotUtil;
+import com.anthony.parkinglot.common.Message;
+import com.anthony.parkinglot.common.util.ParkingLotUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +38,11 @@ public class ParkingServiceImpl implements ParkingService {
             throw new RuntimeException(Message.PARKING_LOT_NOT_CREATED_OR_FULL);
 
         Long emptySlotId = lot.getId();
-        lotRepository.save(new Lot(emptySlotId, regNo, colour));
+        try {
+            lotRepository.save(new Lot(emptySlotId, regNo, colour));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(Message.ERROR_DUPLICATE_PLATE_NO);
+        }
 
         return String.format(Message.ALLOCATED_SLOT_NUMBER, emptySlotId);
     }

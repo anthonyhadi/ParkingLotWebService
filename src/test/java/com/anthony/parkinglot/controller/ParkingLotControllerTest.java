@@ -2,7 +2,7 @@ package com.anthony.parkinglot.controller;
 
 import com.anthony.parkinglot.entity.Lot;
 import com.anthony.parkinglot.service.ParkingService;
-import com.anthony.parkinglot.util.Message;
+import com.anthony.parkinglot.common.Message;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
